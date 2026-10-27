@@ -1,187 +1,1556 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light">
-<title>Pixel Color Studio · Color by Number</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel Color Studio</title>
 <style>
-:root{--bg:#f5f6fb;--surface:#fff;--ink:#20273b;--muted:#647087;--line:#e4e8f0;--accent:#6555dd;--accent-dark:#4939c4;--soft:#f1efff;--green:#128562;--shadow:0 8px 30px rgba(30,42,76,.055)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink)}body{background:var(--bg)}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.42;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,.swatch-btn:focus-visible,canvas:focus-visible{outline:3px solid #ac9cff;outline-offset:3px}
-header{padding:20px clamp(16px,3vw,42px) 18px;border-bottom:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:14px}.logo{background:#edeaff;border:1px solid #dbd4ff;padding:9px;border-radius:13px;display:grid;grid-template-columns:repeat(3,8px);grid-template-rows:repeat(3,8px);gap:3px}.logo i{border-radius:2px;background:#6355d8}.logo i:nth-child(2),.logo i:nth-child(4),.logo i:nth-child(9){background:#f4b44f}.logo i:nth-child(5),.logo i:nth-child(7){background:#86cfc6}.brand-title{font-size:1.23rem;font-weight:850;letter-spacing:-.035em}.brand-sub{color:var(--muted);font-size:.81rem;margin-top:2px}.tag{background:#eef8f3;color:#216c52;border:1px solid #d6eee0;padding:7px 11px;border-radius:99px;font-size:.78rem;font-weight:750}.workspace{max-width:1720px;margin:0 auto;padding:22px clamp(14px,2.8vw,40px) 36px;display:grid;grid-template-columns:292px minmax(0,1fr) 266px;align-items:start;gap:18px}.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.sidebar,.palette-panel{padding:20px}.card-title{font-size:1.02rem;font-weight:800;letter-spacing:-.018em;margin:0 0 5px}.intro{font-size:.81rem;line-height:1.6;color:var(--muted);margin:0 0 18px}.step{font-size:.69rem;letter-spacing:.11em;text-transform:uppercase;color:#6a60bd;font-weight:850;margin:19px 0 10px}.step:first-of-type{margin-top:12px}.upload{display:flex;gap:10px;align-items:center;justify-content:center;border:1.5px dashed #c1b8f9;border-radius:12px;padding:14px 10px;background:#faf9ff;color:#5543ca;font-weight:750;font-size:.88rem;cursor:pointer;transition:.14s}.upload:hover,.upload.drag{background:#f0edff;border-color:#6555dd}.upload span{font-size:1.16rem}.filename{word-break:break-word;margin-top:7px;font-size:.73rem;color:#69748a;min-height:18px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;border-radius:10px;font-size:.82rem;font-weight:750;display:inline-flex;gap:6px;justify-content:center;align-items:center;min-height:40px}.btn:hover:not(:disabled){background:#f7f7fc}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.primary:hover:not(:disabled){background:var(--accent-dark)}.btn.soft{background:var(--soft);color:#5144c0;border-color:#e1dbff}.btn.warn{color:#b44246}.btn.full{width:100%}.btn-row{display:flex;gap:8px;flex-wrap:wrap}.btn-row>.btn{flex:1}.field{margin-bottom:14px}.field label,.field .field-label{display:flex;justify-content:space-between;font-weight:700;font-size:.80rem;margin-bottom:7px}.field output{color:#584aca;font-weight:800;font-variant-numeric:tabular-nums}.field input[type=range]{width:100%;accent-color:var(--accent)}.field select,.field input[type=text]{border:1px solid #d7dce8;border-radius:9px;background:#fff;padding:10px;width:100%;font-size:.83rem;color:var(--ink)}.tiny{font-size:.72rem;line-height:1.5;color:var(--muted)}.sep{border:0;border-top:1px solid var(--line);margin:17px 0}.mode-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.board{padding:20px;min-width:0}.board-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}.board-heading h1{font-size:1.3rem;letter-spacing:-.035em;margin:0 0 4px}.board-heading p{margin:0;color:var(--muted);font-size:.82rem}.board-controls{display:flex;align-items:center;gap:7px}.zoom{border:1px solid var(--line);background:#fff;min-height:36px;border-radius:9px;padding:6px 9px;font-size:.81rem;color:#46506a}.progressline{margin:17px 0 12px;display:flex;justify-content:space-between;align-items:center;gap:14px;font-size:.78rem}.progressline strong{font-size:.85rem}.meter{background:#edf0f7;height:9px;border-radius:99px;overflow:hidden}.meter>div{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#5b55d8,#37bba1);transition:width .2s}.canvas-outer{background:#ecf0f7;border:1px solid #dfe4ef;border-radius:14px;min-height:450px;max-height:min(67vh,760px);overflow:auto;display:flex;align-items:flex-start;justify-content:flex-start;padding:22px;position:relative;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;scrollbar-width:thin}.canvas-outer canvas{display:block;flex:none;background:#fff;box-shadow:0 4px 18px rgba(32,49,80,.12);cursor:pointer;touch-action:pan-x pan-y;image-rendering:pixelated;user-select:none;-webkit-user-select:none}.canvas-outer canvas.paint-mode{touch-action:none;cursor:crosshair}.board-foot{margin-top:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.board-foot .feedback{font-size:.81rem;color:#6a7589;flex:1}.feedback.good{color:var(--green);font-weight:700}.feedback.bad{color:#b94350;font-weight:700}.guide-text{font-size:.76rem;color:#728098;margin-top:9px}.board-bottom{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.board-bottom .btn{min-width:94px}.palette-panel .intro{margin-bottom:11px}.selected-banner{border-radius:12px;padding:10px 11px;margin-bottom:13px;background:#f6f4ff;border:1px solid #e2ddff;display:flex;align-items:center;gap:10px}.selected-banner .picked-color{width:30px;height:30px;border-radius:8px;border:1px solid #0001}.selected-banner .picked-num{font-size:.91rem;font-weight:850}.selected-banner small{font-size:.71rem;color:var(--muted)}.swatch-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.swatch-btn{background:#fff;border:1.5px solid #e4e7f1;border-radius:11px;padding:8px;display:flex;align-items:center;gap:7px;text-align:left;min-width:0;transition:.13s}.swatch-btn:hover{border-color:#a7a0f1;background:#faf9ff}.swatch-btn.active{border-color:#6b5ee6;background:#f4f1ff;box-shadow:0 0 0 2px #dedaff}.swatch-btn.done{opacity:.64}.swatch-btn .sw{width:28px;height:28px;flex:none;border-radius:7px;border:1px solid rgba(0,0,0,.09)}.swatch-btn .sw-label{min-width:0;flex:1}.swatch-btn b{display:block;font-size:.79rem}.swatch-btn small{color:#77849a;display:block;font-size:.66rem;white-space:nowrap}.palette-footer{font-size:.75rem;color:var(--muted);line-height:1.6;margin:14px 0 0}.mini-original{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:repeating-conic-gradient(#e7e7ec 0 25%,#fff 0 50%) 0 0/16px 16px;display:grid;place-items:center;margin-top:8px}.mini-original img{max-width:100%;max-height:140px;display:block;object-fit:contain}.expander{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}.expander summary{font-weight:750;font-size:.8rem;cursor:pointer}.expander p{font-size:.75rem;line-height:1.6;color:var(--muted)}.result-note{margin-top:14px;padding:12px 14px;border-radius:12px;background:#edf9f4;color:#146b51;font-size:.85rem;font-weight:750;display:none}
-#printSheet{display:none}.print-help{margin:8px 0 4px}.print-menu{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}.print-note{font-size:.71rem;color:var(--muted);margin-top:6px}.summary-box{display:flex;justify-content:space-between;color:#687389;font-size:.76rem;margin-top:12px}.iconline{display:inline-flex;align-items:center;gap:6px}
-@media(max-width:1150px){.workspace{grid-template-columns:254px minmax(0,1fr);}.palette-panel{grid-column:1/-1}.swatch-list{grid-template-columns:repeat(6,minmax(0,1fr))}.canvas-outer{min-height:380px}}
-@media(max-width:800px){.workspace{grid-template-columns:1fr;gap:13px}.sidebar,.palette-panel{padding:18px}.board{padding:15px}.canvas-outer{min-height:310px;padding:12px}.palette-panel{grid-column:auto}.swatch-list{grid-template-columns:repeat(3,minmax(0,1fr))}.controls-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.controls-compact .field{margin-bottom:0}}
-@media(max-width:500px){header{padding:13px 16px}.tag{display:none}.workspace{padding:12px 10px 35px}.canvas-outer{max-height:60vh}.swatch-list{grid-template-columns:1fr 1fr}.controls-compact{grid-template-columns:1fr 1fr}.board-heading h1{font-size:1.15rem}}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f5fb;
+  color: #243047;
+  font: 15px system-ui, sans-serif;
+}
+header {
+  background: #fff;
+  padding: 22px 5%;
+  border-bottom: 1px solid #dfe3ee;
+}
+h1 { margin: 0; font-size: 27px; }
+h2 { margin: 0 0 12px; font-size: 18px; }
+p { line-height: 1.55; }
+.muted { color: #637189; font-size: 13px; }
+main {
+  max-width: 1450px;
+  margin: auto;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr) 235px;
+  gap: 15px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e0e5ef;
+  border-radius: 14px;
+  padding: 18px;
+  min-width: 0;
+}
+label {
+  display: block;
+  font-weight: 650;
+  margin: 14px 0 6px;
+  font-size: 13px;
+}
+input, button { font: inherit; }
+input[type="file"],
+input[type="text"],
+input[type="url"] {
+  width: 100%;
+  max-width: 100%;
+}
+input[type="text"],
+input[type="url"] {
+  padding: 10px;
+  border: 1px solid #cbd3e1;
+  border-radius: 8px;
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: #6151d9;
+}
+button {
+  border: 0;
+  background: #6151d9;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 650;
+}
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+button.secondary {
+  background: #eae8ff;
+  color: #4037a0;
+}
+button.active {
+  outline: 3px solid #ae9fff;
+  background: #4037aa;
+  color: #fff;
+}
+.buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 9px 0;
+}
+.buttons button { flex: 1 1 90px; }
+.divider {
+  border: 0;
+  border-top: 1px solid #e5e8f0;
+  margin: 18px 0;
+}
+#progressBar {
+  height: 10px;
+  background: #e9eaf3;
+  border-radius: 99px;
+  overflow: hidden;
+}
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #35a981;
+  transition: width .15s;
+}
+#progressText {
+  font-weight: 700;
+  font-size: 13px;
+  margin: 7px 0;
+}
+#message {
+  font-size: 13px;
+  color: #52637b;
+  min-height: 20px;
+}
+#touchModes {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 7px;
+}
+#touchModes button { flex: 1; }
+#quickColors {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 10px 1px;
+  -webkit-overflow-scrolling: touch;
+}
+#quickColors button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  color: #1e293b;
+  border: 1px solid #cbd3e1;
+}
+#quickColors button.active {
+  background: #edeaff;
+  border: 2px solid #6151d9;
+}
+.chip {
+  width: 19px;
+  height: 19px;
+  display: inline-block;
+  flex: none;
+  border-radius: 4px;
+  border: 1px solid #8d97a7;
+}
+#viewport {
+  width: 100%;
+  height: 490px;
+  max-height: 65dvh;
+  overflow: auto;
+  border-radius: 10px;
+  background: #e9edf4;
+  padding: 12px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+}
+#grid {
+  display: block;
+  width: auto;
+  max-width: none;
+  background: #fff;
+  image-rendering: pixelated;
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+#grid.drag-paint {
+  touch-action: none;
+  cursor: crosshair;
+}
+#palette {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+#palette button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  color: #29364a;
+  background: #fff;
+  border: 1px solid #cfd6e4;
+  text-align: left;
+}
+#palette button.active {
+  background: #eeecff;
+  border-color: #6151d9;
+}
+#originalPreview {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+}
+.submission {
+  max-width: 1414px;
+  margin: 0 auto 28px;
+}
+.submitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+#photoPreview {
+  display: none;
+  max-width: 100%;
+  max-height: 260px;
+  border: 1px solid #d9deea;
+  border-radius: 8px;
+}
+#printPage { display: none; }
 
-/* Mobile interaction: native scrolling in Move mode, finger painting only in Paint mode. */
-.touch-toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:12px}
-.touch-toolbar .btn{flex:1 1 125px;min-height:43px}
-.touch-toolbar .mode-active{background:var(--accent);color:white;border-color:var(--accent)}
-.touch-help{font-size:.78rem;color:#5a6982;margin:8px 0 0;line-height:1.45}
-.quick-colors{display:flex;gap:7px;max-width:100%;overflow-x:auto;white-space:nowrap;padding:10px 2px 12px;margin-top:4px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.quick-color{background:white;border:1.5px solid #d5d9e9;border-radius:10px;min-width:54px;min-height:45px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px;font-size:.84rem;font-weight:800}
-.quick-color .quick-chip{width:19px;height:19px;flex:none;border:1px solid #0002;border-radius:5px}
-.quick-color[aria-pressed="true"]{background:#f1efff;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-@media(max-width:800px){.canvas-outer{min-height:0;height:min(58dvh,520px);max-height:none}.touch-toolbar{position:sticky;top:0;z-index:2;background:#fff;padding:8px 0 5px}.quick-colors{margin-top:1px}}
-
-@page{size:A4 portrait;margin:9mm}
-@media print{html,body{background:#fff!important;margin:0;padding:0}header,.workspace{display:none!important}#printSheet{display:block!important;width:185mm;max-height:270mm;overflow:hidden;margin:0 auto;color:#192637;font-family:Arial,sans-serif;page-break-inside:avoid}.print-head{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid #bfc8d5;padding:0 0 3mm}.print-head h2{font-size:16pt;margin:0 0 1mm}.print-head p{margin:0;font-size:8pt;color:#5a6676}.print-fields{font-size:9pt;padding:3mm 0 2mm}.print-canvas{display:flex;align-items:center;justify-content:center;max-height:169mm;min-height:0}.print-canvas svg{display:block;max-width:100%;max-height:169mm;shape-rendering:crispEdges}.print-key-title{font-weight:bold;font-size:9pt;margin:3.5mm 0 2mm}.print-key{display:grid;grid-template-columns:repeat(4,1fr);column-gap:3mm;row-gap:1.2mm}.print-key-item{font-size:7.5pt;display:flex;align-items:center;gap:2mm;white-space:nowrap}.print-key-item .pchip{width:4.5mm;height:4.5mm;border:.2mm solid #b4bcc9;flex:none}.print-bottom{font-size:7.5pt;color:#667385;margin-top:3mm;padding-top:1.5mm;border-top:1px solid #e2e5eb}.print-key-item b{font-size:8pt}}
+@media (max-width: 1000px) {
+  main { grid-template-columns: 1fr 1fr; }
+  main .work {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+}
+@media (max-width: 680px) {
+  main {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+  }
+  .card { padding: 14px; }
+  #viewport { height: 55dvh; }
+  .submitGrid { grid-template-columns: 1fr; }
+  .submission { margin: 0 10px 20px; }
+  header { padding: 16px; }
+}
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  header, main, .submission {
+    display: none !important;
+  }
+  body { background: #fff; }
+  #printPage {
+    display: block;
+    width: 185mm;
+    margin: auto;
+    color: #111827;
+  }
+  #printPage h2 {
+    font-size: 16pt;
+    margin: 0 0 3mm;
+  }
+  #printGrid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #printGrid svg {
+    max-width: 100%;
+    max-height: 175mm;
+    display: block;
+  }
+  #printKey {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2mm;
+  }
+  .keyItem {
+    display: flex;
+    gap: 2mm;
+    align-items: center;
+    font-size: 8pt;
+  }
+  .keyItem svg {
+    flex: none;
+    width: 6mm;
+    height: 6mm;
+  }
+}
 </style>
 </head>
-<body>
-<header><div class="brand"><div class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><div class="brand-title">Pixel Color Studio</div><div class="brand-sub">Turn any picture into a color-by-number activity</div></div></div><span class="tag">Works offline · One HTML file</span></header>
-<main class="workspace">
-<aside class="card sidebar" aria-label="Image and activity settings">
-  <h2 class="card-title">Create your activity</h2><p class="intro">Upload your own picture. The app finds colors <b>from your image</b> and gives each color one number.</p>
-  <div class="step">01 / Your image</div>
-  <label class="upload" id="dropzone" for="upload"><span aria-hidden="true">↥</span> Upload a picture</label>
-  <input type="file" id="upload" accept="image/*" hidden>
-  <div class="filename" id="filename">Using the sample picture</div>
-  <div class="btn-row" style="margin-top:9px"><button class="btn full soft" id="useSample">Use sample illustration</button></div>
-  <div class="step">02 / Grid settings</div>
-  <div class="controls-compact">
-    <div class="field"><label for="size">Grid width <output id="sizeOut">40</output></label><input id="size" type="range" min="12" max="64" value="40" step="1"><div class="tiny">More cells = more detail.</div></div>
-    <div class="field"><label for="colors">Max colors <output id="colorsOut">10</output></label><input id="colors" type="range" min="3" max="24" value="10" step="1"><div class="tiny">Fewer colors = easier coloring.</div></div>
-    <div class="field"><label for="shape">Image shape</label><select id="shape"><option value="crop">Square (center crop)</option><option value="ratio">Original proportions</option><option value="stretch">Stretch to square</option></select></div>
-    <div class="field"><label for="sampling">Cell color selection</label><select id="sampling"><option value="dominant">Most common color</option><option value="center">Center pixel</option></select></div>
-  </div>
-  <button class="btn primary full" id="create" style="margin-top:6px">✦ Create numbered grid</button>
-  <p class="tiny" style="margin:9px 0 0">Creating a new grid starts a fresh coloring activity.</p>
-  <hr class="sep">
-  <div class="step" style="margin-top:0">03 / Activity tools</div>
-  <div class="btn-row"><button id="undo" class="btn" title="Undo last painted square">↶ Undo</button><button id="eraseToggle" class="btn" aria-pressed="false">⌫ Eraser</button></div>
-  <div class="btn-row" style="margin-top:8px"><button id="hint" class="btn soft">✧ Hint a square</button><button id="clear" class="btn warn">↻ Start over</button></div>
-  <hr class="sep">
-  <div class="step" style="margin-top:0">04 / Save or print</div>
-  <div class="field"><label for="printMode">Print layout</label><select id="printMode"><option value="blank">Uncolored number worksheet</option><option value="progress">My current progress</option><option value="solution">Completed color reference</option></select></div>
-  <button class="btn full" id="print">▤ Print A4 · Save as PDF</button>
-  <div class="btn-row" style="margin-top:8px"><button class="btn" id="png">↓ Save PNG</button><button class="btn" id="save">↓ Save progress</button></div>
-  <label for="load" class="btn full" style="margin-top:8px;cursor:pointer">↥ Load saved progress</label><input id="load" type="file" accept=".json,application/json" hidden>
-  <div class="tiny print-help">Print opens your browser’s print window. Choose <strong>Save as PDF</strong> to make a one-page A4 worksheet. Saved progress is a JSON file you can open later.</div>
-</aside>
-<section class="card board" aria-label="Coloring workspace">
-  <div class="board-heading"><div><h1>Your coloring grid</h1><p id="gridInfo">40 × 40 cells · Pick a color to start</p></div><div class="board-controls"><label for="zoom" class="tiny">Cell size</label><select id="zoom" class="zoom"><option value="18">Small</option><option value="25" selected>Normal</option><option value="34">Large</option></select></div></div>
-  <div class="progressline"><strong id="progressText">0 of 1,600 squares colored</strong><span id="percent">0%</span></div><div class="meter" role="progressbar" aria-label="Colored cells" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter"><div id="bar"></div></div>
-  <div class="touch-toolbar" role="group" aria-label="Grid touch controls">
-    <button class="btn" id="moveMode" type="button" aria-pressed="false">↔ Move / Tap</button>
-    <button class="btn" id="paintMode" type="button" aria-pressed="false">✎ Drag to Paint</button>
-  </div>
-  <p class="touch-help" id="touchHelp">Swipe to scroll the grid in Move mode; tap a numbered square to color it.</p>
-  <div class="quick-colors" id="quickColors" aria-label="Quick color selection"></div>
-  <div class="canvas-outer" id="scroller" tabindex="0" aria-label="Scrollable image grid"><canvas id="board" tabindex="0" role="img" aria-label="Numbered pixel grid. Select a color, tap matching squares, or switch to drag painting."></canvas></div>
-  <div class="board-foot"><div class="feedback" id="feedback" aria-live="polite">Pick a color on the right, then paint every square showing that number.</div><button class="btn" id="numbersToggle" aria-pressed="true"># Show numbers</button></div>
-  <div class="guide-text">Tip: On a phone, use Move / Tap to scroll with your finger and tap squares to color. Switch to Drag to Paint to color by swiping. On a computer, arrow keys and Space work too.</div>
-  <div class="result-note" id="complete">★ Picture complete! You’ve colored every numbered square.</div>
-</section>
-<aside class="card palette-panel" aria-label="Color choices">
-  <h2 class="card-title">Your color palette</h2><p class="intro">Choose a color, then fill the squares with its matching number. Only correct squares will fill in.</p>
-  <div class="selected-banner" id="selectedBanner"><span class="picked-color" id="selectedColor"></span><div><div class="picked-num" id="selectedText">Color 1 selected</div><small id="selectedSub">Start painting number 1</small></div></div>
-  <div id="swatches" class="swatch-list"></div>
-  <div class="summary-box"><span id="paletteCount">0 colors from image</span><span id="remaining">0 left</span></div>
-  <div class="expander"><details><summary>See your original picture</summary><div class="mini-original"><img id="originalPreview" alt="Original uploaded image"></div><p>The palette uses real source-image colors. The numbered grid simplifies similar shades so it can be colored by hand.</p></details></div>
-  <div class="expander"><details><summary>How to play</summary><p>Pick a numbered color. Find that number in the grid and color its squares. A different number will not accept that color. You can erase completed squares, undo changes, or save your progress to resume later.</p></details></div>
-</aside>
+
+<body data-teacher-form="">
+<header>
+  <h1>🎨 Pixel Color Studio</h1>
+  <p class="muted">
+    Upload a picture, create a numbered pixel grid,
+    and color it online or on paper.
+  </p>
+</header>
+
+<main>
+  <aside class="card">
+    <h2>1. Create an activity</h2>
+
+    <label for="upload">Upload an image</label>
+    <input id="upload" type="file" accept="image/*">
+
+    <label for="resolution">
+      Grid size:
+      <span id="sizeValue">40</span> ×
+      <span id="sizeValue2">40</span>
+    </label>
+    <input id="resolution" type="range"
+           min="12" max="64" value="40">
+
+    <label for="colorCount">
+      Maximum colors:
+      <span id="countValue">8</span>
+    </label>
+    <input id="colorCount" type="range"
+           min="2" max="24" value="8">
+
+    <p class="muted">
+      Palette colors are sampled from the image,
+      not invented.
+    </p>
+
+    <button id="generate">Generate grid</button>
+
+    <hr class="divider">
+
+    <h2>2. Coloring tools</h2>
+    <div class="buttons">
+      <button class="secondary" id="undo">Undo</button>
+      <button class="secondary" id="erase">Eraser</button>
+      <button class="secondary" id="reset">Reset</button>
+    </div>
+
+    <hr class="divider">
+
+    <h2>3. Save or print</h2>
+    <div class="buttons">
+      <button id="savePNG">Save PNG</button>
+      <button id="print">Print A4</button>
+      <button id="saveProject" class="secondary">
+        Save progress
+      </button>
+      <button id="openProject" class="secondary">
+        Open progress
+      </button>
+      <input id="projectFile" type="file"
+             accept=".json,application/json" hidden>
+    </div>
+  </aside>
+
+  <section class="card work">
+    <h2>Color the numbered squares</h2>
+
+    <div id="progressText">0% complete</div>
+    <div id="progressBar">
+      <div id="progressFill"></div>
+    </div>
+
+    <p id="message">
+      Choose a color, then tap squares with the
+      matching number.
+    </p>
+
+    <div id="touchModes">
+      <button id="moveMode" class="secondary">
+        ↔ Move / Tap
+      </button>
+      <button id="paintMode" class="secondary">
+        ✎ Drag to Paint
+      </button>
+    </div>
+
+    <p class="muted" id="touchHint">
+      Swipe to scroll the grid; tap to color.
+    </p>
+
+    <div id="quickColors" aria-label="Choose a color"></div>
+
+    <div id="viewport" tabindex="0"
+         aria-label="Scrollable numbered pixel grid">
+      <canvas id="grid"></canvas>
+    </div>
+  </section>
+
+  <aside class="card">
+    <h2>Color instructions</h2>
+    <p class="muted">
+      Every number corresponds to exactly one color.
+    </p>
+    <div id="palette"></div>
+
+    <hr class="divider">
+
+    <h2>Original image</h2>
+    <img id="originalPreview" alt="Original picture">
+  </aside>
 </main>
-<section id="printSheet" aria-label="Printable color-by-number worksheet"><div class="print-head"><div><h2>Pixel Color Studio</h2><p id="printSubtitle">Color by Number Worksheet</p></div><div style="font-size:8pt;color:#5a6676">Image pixels → numbered colors</div></div><div class="print-fields">Name: ____________________________ &nbsp;&nbsp; Class: ______________ &nbsp;&nbsp; Date: ______________</div><div class="print-canvas" id="printCanvas"></div><div class="print-key-title">COLOR KEY — match each number to its color</div><div class="print-key" id="printKey"></div><div class="print-bottom">One numbered color = one original-image color. Generated with Pixel Color Studio.</div></section>
+
+<section class="card submission">
+  <h2>📤 Submit your colored picture</h2>
+
+  <p class="muted">
+    Upload a photo of a paper worksheet or submit
+    your digital coloring. Files stay on this device
+    until you upload them using your teacher's form.
+  </p>
+
+  <div class="submitGrid">
+    <div>
+      <label for="studentName">Student name</label>
+      <input id="studentName" type="text"
+             placeholder="Your name">
+
+      <label for="studentClass">Class</label>
+      <input id="studentClass" type="text"
+             placeholder="Example: 8A">
+
+      <label for="finishedPhoto">
+        Upload a picture of your colored worksheet
+      </label>
+      <input id="finishedPhoto" type="file"
+             accept="image/*">
+
+      <div class="buttons">
+        <button id="downloadDigital">
+          Save digital coloring with name
+        </button>
+        <button id="downloadPhoto" class="secondary">
+          Save uploaded photo with name
+        </button>
+      </div>
+
+      <button id="submitLink">
+        Open teacher's upload form
+      </button>
+
+      <p class="muted" id="submissionMessage">
+        Save your picture, then upload it through
+        the teacher's form.
+      </p>
+    </div>
+
+    <div>
+      <h2>Uploaded photo preview</h2>
+      <img id="photoPreview"
+           alt="Photo of the student's colored worksheet">
+
+      <p class="muted">
+        The teacher receives your work only after
+        you submit it through their form.
+      </p>
+
+      <details>
+        <summary><strong>Teacher setup</strong></summary>
+
+        <label for="teacherForm">
+          Google Form file-upload link
+        </label>
+        <input id="teacherForm" type="url"
+               placeholder="https://forms.gle/...">
+
+        <div class="buttons">
+          <button id="setForm" class="secondary">
+            Use this link
+          </button>
+          <button id="teacherHTML" class="secondary">
+            Download classroom HTML with link
+          </button>
+        </div>
+
+        <p class="muted">
+          Create a Google Form with a File upload
+          question. Download and distribute the
+          classroom HTML to give every student the
+          same submission link.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="printPage">
+  <h2>Pixel Coloring Worksheet</h2>
+  <p>
+    Name: _____________________
+    Class: __________
+    Date: __________
+  </p>
+  <div id="printGrid"></div>
+  <h3>Color instructions</h3>
+  <div id="printKey"></div>
+</section>
+
 <script>
-(()=>{
-'use strict';
-const $=id=>document.getElementById(id);
-const canvas=$('board'),context=canvas.getContext('2d');
-const sample=document.createElement('canvas'),sctx=sample.getContext('2d',{willReadFrequently:true});
-let image=sample, imageUrl='', imageName='Sample illustration';
-let cols=40,rows=40,palette=[],targets=[],colored=[],selected=1,eraser=false,showNumbers=true,undoStack=[],badCell=-1,focusIndex=0;
-let drawing=false,lastIndex=-1;
-let interactionMode=window.matchMedia('(pointer:coarse)').matches?'move':'paint';
-let tapStart=null;
-function setInteractionMode(mode){
-  interactionMode=mode; drawing=false; tapStart=null; lastIndex=-1;
-  canvas.classList.toggle('paint-mode',mode==='paint');
-  $('moveMode').classList.toggle('mode-active',mode==='move');
-  $('paintMode').classList.toggle('mode-active',mode==='paint');
-  $('moveMode').setAttribute('aria-pressed',String(mode==='move'));
-  $('paintMode').setAttribute('aria-pressed',String(mode==='paint'));
-  $('touchHelp').textContent=mode==='move'
-    ? 'Move / Tap: swipe in any direction to scroll; tap a square to color it. No accidental painting while scrolling.'
-    : 'Drag to Paint: drag across matching numbers to color them. Choose Move / Tap to scroll again.';
-}
-$('moveMode').addEventListener('click',()=>setInteractionMode('move'));
-$('paintMode').addEventListener('click',()=>setInteractionMode('paint'));
+(() => {
+  'use strict';
 
-const toHex=rgb=>'#'+rgb.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('').toUpperCase();
-const colorLab=rgb=>{const gamma=v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4};const [r,g,b]=rgb.map(gamma),x=(.4124564*r+.3575761*g+.1804375*b)/.95047,y=.2126729*r+.7151522*g+.072175*b,z=(.0193339*r+.119192*b+.9503041*b)/1.08883;const f=v=>v>.008856451679?Math.cbrt(v):7.787037*v+16/116;const fx=f(x),fy=f(y),fz=f(z);return [116*fy-16,500*(fx-fy),200*(fy-fz)];};
-const dist=(a,b)=>(a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2;
-function nearest(lab,centers){let best=Infinity,idx=0;for(let i=0;i<centers.length;i++){let d=dist(lab,centers[i]);if(d<best){best=d;idx=i}}return idx;}
-function nameColor(rgb){const [r,g,b]=rgb.map(v=>v/255),hi=Math.max(r,g,b),lo=Math.min(r,g,b),delta=hi-lo,l=(hi+lo)/2;if(delta<.085)return l<.2?'Near black':l>.87?'Near white':l>.66?'Light gray':l<.34?'Dark gray':'Gray';let h=0;if(hi===r)h=((g-b)/delta)%6;else if(hi===g)h=(b-r)/delta+2;else h=(r-g)/delta+4;h=(h*60+360)%360;let t=h<13||h>=350?'Red':h<43?'Orange':h<68?'Yellow':h<165?'Green':h<195?'Teal':h<258?'Blue':h<295?'Purple':'Pink';if(h>=13&&h<52&&l<.53)return 'Brown';if(l<.39&&t!=='Red')return 'Dark '+t.toLowerCase();if(l>.76)return 'Light '+t.toLowerCase();return t;}
-function demo(){sample.width=600;sample.height=600;const c=sctx;c.fillStyle='#91c9e9';c.fillRect(0,0,600,600);c.fillStyle='#f7dfa4';c.beginPath();c.arc(476,115,67,0,7);c.fill();c.fillStyle='#f7f7ed';for(let [x,y,rx,ry] of [[130,106,76,30],[167,97,52,39],[295,147,68,22],[340,132,43,33]]){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fill();}c.fillStyle='#62a978';c.beginPath();c.ellipse(160,590,350,190,0,0,7);c.fill();c.fillStyle='#328a60';c.beginPath();c.ellipse(540,580,310,150,0,0,7);c.fill();c.fillStyle='#f3c58b';c.fillRect(196,290,219,191);c.fillStyle='#cd6570';c.beginPath();c.moveTo(165,300);c.lineTo(307,185);c.lineTo(442,300);c.closePath();c.fill();c.fillStyle='#4a7f89';c.fillRect(226,327,53,60);c.fillRect(351,327,43,60);c.fillStyle='#faf9ef';c.fillRect(253,327,6,60);c.fillRect(226,354,53,6);c.fillRect(369,327,6,60);c.fillStyle='#a06f57';c.fillRect(295,389,56,92);c.fillStyle='#6b4d3d';c.fillRect(50,275,34,220);c.fillStyle='#46845a';for(let [x,y,r] of [[47,267,69],[99,256,74],[80,193,78]]){c.beginPath();c.arc(x,y,r,0,7);c.fill()}c.fillStyle='#f7dfa4';for(let [x,y] of [[478,482],[506,498],[532,470],[143,497],[112,508]]){c.beginPath();c.arc(x,y,7,0,7);c.fill()}image=sample;imageName='Sample illustration';$('filename').textContent='Using the sample illustration';updateOriginalPreview();}
-function updateOriginalPreview(){const out=document.createElement('canvas');out.width=300;out.height=Math.max(1,Math.round(300*(image.naturalHeight||image.height)/(image.naturalWidth||image.width)));out.getContext('2d').drawImage(image,0,0,out.width,out.height);$('originalPreview').src=out.toDataURL('image/png');}
-function sourceSamples(){cols=+$('size').value;const iw=image.naturalWidth||image.width,ih=image.naturalHeight||image.height;const mode=$('shape').value;rows=mode==='ratio'?Math.max(1,Math.min(128,Math.round(cols*ih/iw))):cols;const n=5,w=cols*n,h=rows*n;const s=document.createElement('canvas');s.width=w;s.height=h;const sc=s.getContext('2d',{willReadFrequently:true});sc.imageSmoothingEnabled=false;sc.fillStyle='#fff';sc.fillRect(0,0,w,h);if(mode==='crop'){const a=Math.min(iw,ih);sc.drawImage(image,(iw-a)/2,(ih-a)/2,a,a,0,0,w,h)}else sc.drawImage(image,0,0,w,h);return {data:sc.getImageData(0,0,w,h).data,w,n};}
-function samplePalette(data,maxColors){const bins=new Map();for(let i=0;i<data.length;i+=4){const r=data[i],g=data[i+1],b=data[i+2],key=((r>>3)<<10)|((g>>3)<<5)|(b>>3);let v=bins.get(key);if(!v){v={count:0,s:[0,0,0],sample:null,error:Infinity};bins.set(key,v)}v.count++;v.s[0]+=r;v.s[1]+=g;v.s[2]+=b;}
- for(let [k,v] of bins)v.avg=v.s.map(t=>t/v.count);
- for(let i=0;i<data.length;i+=4){const rgb=[data[i],data[i+1],data[i+2]],key=((rgb[0]>>3)<<10)|((rgb[1]>>3)<<5)|(rgb[2]>>3),v=bins.get(key),d=(rgb[0]-v.avg[0])**2+(rgb[1]-v.avg[1])**2+(rgb[2]-v.avg[2])**2;if(d<v.error){v.error=d;v.sample=rgb}}
- let candidates=[...bins.values()].map(v=>({rgb:v.sample,lab:colorLab(v.sample),weight:v.count}));candidates.sort((a,b)=>b.weight-a.weight);if(!candidates.length)return[];
- if(candidates.length<=maxColors)return candidates.map(v=>({rgb:v.rgb,hex:toHex(v.rgb),lab:v.lab,name:nameColor(v.rgb)}));
- let centers=[candidates[0].lab.slice()];while(centers.length<maxColors){let pick=-1,score=0;for(let i=0;i<candidates.length;i++){const d=dist(candidates[i].lab,centers[nearest(candidates[i].lab,centers)])*Math.sqrt(candidates[i].weight);if(d>score){score=d;pick=i}}if(pick<0||score<.001)break;const next=candidates[pick].lab;if(centers.some(c=>dist(c,next)<.001))break;centers.push(next.slice())}
- for(let j=0;j<10;j++){const sums=centers.map(()=>[0,0,0]),weights=centers.map(()=>0);for(let p of candidates){let id=nearest(p.lab,centers),wt=p.weight;weights[id]+=wt;for(let z=0;z<3;z++)sums[id][z]+=p.lab[z]*wt}for(let k=0;k<centers.length;k++)if(weights[k])centers[k]=sums[k].map(v=>v/weights[k])}
- const choices=[];for(let k=0;k<centers.length;k++){let winner=null,low=Infinity;for(let p of candidates){if(nearest(p.lab,centers)!==k)continue;const d=dist(p.lab,centers[k]);if(d<low){low=d;winner=p}}if(winner&&!choices.some(c=>dist(c.lab,winner.lab)<36))choices.push(winner)}
- if(!choices.length)choices.push(candidates[0]);return choices.map(c=>({rgb:c.rgb,lab:c.lab,hex:toHex(c.rgb),name:nameColor(c.rgb)}));}
-function buildGrid(){const {data,w,n}=sourceSamples();palette=samplePalette(data,+$('colors').value);if(!palette.length){feedback('Could not find image colors.',true);return}const labs=palette.map(p=>p.lab),votes=new Uint16Array(palette.length),grid=new Array(cols*rows),mode=$('sampling').value;for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){votes.fill(0);let center=0;for(let dy=0;dy<n;dy++)for(let dx=0;dx<n;dx++){let i=((y*n+dy)*w+x*n+dx)*4,id=nearest(colorLab([data[i],data[i+1],data[i+2]]),labs);votes[id]++;if(dx===2&&dy===2)center=id;}let win=center;if(mode==='dominant')for(let k=0;k<votes.length;k++)if(votes[k]>votes[win])win=k;grid[y*cols+x]=win;}
- const usage=Array(palette.length).fill(0);grid.forEach(i=>usage[i]++);const ordered=usage.map((count,i)=>({count,i})).filter(o=>o.count).sort((a,b)=>b.count-a.count||a.i-b.i);const indexes=Array(palette.length).fill(0);ordered.forEach((v,i)=>indexes[v.i]=i+1);palette=ordered.map(v=>palette[v.i]);targets=grid.map(i=>indexes[i]);colored=Array(targets.length).fill(false);selected=1;eraser=false;undoStack=[];badCell=-1;focusIndex=0;$('eraseToggle').classList.remove('soft');$('eraseToggle').setAttribute('aria-pressed','false');updateAll();feedback('Grid ready! Choose a color and paint its matching numbers.');}
-function cellStats(){const totals=Array(palette.length).fill(0),done=Array(palette.length).fill(0);targets.forEach((n,i)=>{totals[n-1]++;if(colored[i])done[n-1]++});return {totals,done,count:colored.filter(Boolean).length}}
-function render(){const sz=+$('zoom').value;canvas.width=cols*sz;canvas.height=rows*sz;const c=context;c.textAlign='center';c.textBaseline='middle';c.font=`700 ${Math.max(9,sz*(palette.length>=10?.47:.54))}px ui-sans-serif,system-ui,Arial`;for(let i=0;i<targets.length;i++){const id=targets[i],x=(i%cols)*sz,y=Math.floor(i/cols)*sz;const isPainted=colored[i];c.fillStyle=isPainted?palette[id-1].hex:'#ffffff';c.fillRect(x,y,sz,sz);if(!isPainted&&showNumbers){c.fillStyle='#47536c';c.fillText(id,x+sz/2,y+sz/2+.5)}if(isPainted&&showNumbers&&sz>=30){const rgb=palette[id-1].rgb,l=.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];c.fillStyle=l<130?'#ffffffc4':'#162034af';c.font=`600 ${Math.max(9,sz*.34)}px Arial`;c.fillText(id,x+sz/2,y+sz/2);c.font=`700 ${Math.max(9,sz*(palette.length>=10?.47:.54))}px ui-sans-serif,system-ui,Arial`;}if(i===badCell){c.fillStyle='#ed36403b';c.fillRect(x,y,sz,sz)}c.strokeStyle='#d3dbe7';c.lineWidth=.65;c.strokeRect(x+.32,y+.32,sz-.64,sz-.64);}
- if(document.activeElement===canvas){const x=(focusIndex%cols)*sz,y=Math.floor(focusIndex/cols)*sz;c.lineWidth=2;c.strokeStyle='#6b52e8';c.strokeRect(x+1,y+1,sz-2,sz-2)} }
-function paletteView(){const {totals,done,count}=cellStats(),wrap=$('swatches'),quick=$('quickColors');wrap.replaceChildren();quick.replaceChildren();for(let i=0;i<palette.length;i++){const p=palette[i],id=i+1,b=document.createElement('button');b.className='swatch-btn'+(selected===id&&!eraser?' active':'')+(done[i]===totals[i]?' done':'');b.type='button';b.setAttribute('aria-pressed',selected===id&&!eraser?'true':'false');b.setAttribute('aria-label',`Color ${id}: ${p.name}. ${done[i]} of ${totals[i]} cells finished`);const chip=document.createElement('span');chip.className='sw';chip.style.background=p.hex;const name=document.createElement('span');name.className='sw-label';const strong=document.createElement('b');strong.textContent=`${id}. ${p.name}`;const small=document.createElement('small');small.textContent=`${done[i]}/${totals[i]} done`;name.append(strong,small);b.append(chip,name);b.addEventListener('click',()=>{selected=id;eraser=false;$('eraseToggle').classList.remove('soft');$('eraseToggle').setAttribute('aria-pressed','false');paletteView();feedback(`Color ${id} selected. Find the squares numbered ${id}.`)});wrap.append(b);
- const qb=document.createElement('button');qb.type='button';qb.className='quick-color';qb.setAttribute('aria-pressed',String(selected===id&&!eraser));qb.setAttribute('aria-label',`Choose color ${id}: ${p.name}`);
- const qc=document.createElement('span');qc.className='quick-chip';qc.style.background=p.hex;
- const qnum=document.createElement('span');qnum.textContent=String(id);qb.append(qc,qnum);
- qb.addEventListener('click',()=>{selected=id;eraser=false;$('eraseToggle').classList.remove('soft');$('eraseToggle').setAttribute('aria-pressed','false');paletteView();feedback(`Color ${id} selected. Tap every square numbered ${id}.`)});quick.append(qb);
- }$('selectedColor').style.background=eraser?'repeating-linear-gradient(45deg,#fff,#fff 4px,#ddd 4px,#ddd 8px)':palette[selected-1]?.hex||'#ddd';$('selectedText').textContent=eraser?'Eraser selected':`Color ${selected}: ${palette[selected-1]?.name||''}`;$('selectedSub').textContent=eraser?'Click a filled square to erase it':`Find every square marked ${selected}`;$('paletteCount').textContent=`${palette.length} image colors`;$('remaining').textContent=`${targets.length-count} left`}
-function updateProgress(){const done=colored.reduce((n,v)=>n+Number(v),0),percent=Math.round(100*done/Math.max(1,targets.length));$('progressText').textContent=`${done.toLocaleString()} of ${targets.length.toLocaleString()} squares colored`;$('percent').textContent=percent+'%';$('bar').style.width=percent+'%';$('meter').setAttribute('aria-valuenow',percent);$('gridInfo').textContent=`${cols} × ${rows} cells · ${palette.length} image colors`;$('complete').style.display=done===targets.length&&done>0?'block':'none';}
-function updateAll(){render();updateProgress();paletteView();}
-function feedback(message,isBad=false){let e=$('feedback');e.textContent=message;e.className='feedback '+(isBad?'bad':'good');}
-function applyAt(index){if(index<0||index>=targets.length||index===lastIndex)return;lastIndex=index;if(eraser){if(colored[index]){undoStack.push({index,old:true});colored[index]=false;updateAll();feedback('Square erased.')}}else if(targets[index]===selected){if(!colored[index]){undoStack.push({index,old:false});colored[index]=true;updateAll();const s=cellStats();if(s.count===targets.length)feedback('Wonderful! The image is complete.');else feedback(`Correct! This is color ${selected}.`);}}else if(!colored[index]){badCell=index;render();feedback(`That square is number ${targets[index]}. Choose color ${targets[index]} to paint it.`,true)}}
-function pointIndex(evt){const r=canvas.getBoundingClientRect(),x=evt.clientX-r.left,y=evt.clientY-r.top;if(x<0||y<0||x>=r.width||y>=r.height)return -1;const a=Math.floor(x/r.width*cols),b=Math.floor(y/r.height*rows);return b*cols+a}
-canvas.addEventListener('pointerdown',e=>{
-  lastIndex=-1;badCell=-1;
-  if(interactionMode==='move'){
-    // Do not call preventDefault or setPointerCapture: preserve native swipe scrolling.
-    tapStart={id:e.pointerId,x:e.clientX,y:e.clientY};
-    return;
-  }
-  e.preventDefault();canvas.setPointerCapture(e.pointerId);
-  drawing=true;applyAt(pointIndex(e));
-});
-canvas.addEventListener('pointermove',e=>{
-  if(interactionMode==='paint'&&drawing)applyAt(pointIndex(e));
-});
-canvas.addEventListener('pointerup',e=>{
-  if(interactionMode==='move'&&tapStart&&tapStart.id===e.pointerId){
-    const movement=Math.hypot(e.clientX-tapStart.x,e.clientY-tapStart.y);
-    if(movement<11){lastIndex=-1;badCell=-1;applyAt(pointIndex(e));}
-  }
-  tapStart=null;drawing=false;lastIndex=-1;
-});
-const pointerCancel=()=>{tapStart=null;drawing=false;lastIndex=-1;};
-canvas.addEventListener('pointercancel',pointerCancel);
-canvas.addEventListener('lostpointercapture',pointerCancel);
+  const $ = id => document.getElementById(id);
+  const canvas = $('grid');
+  const ctx = canvas.getContext('2d');
 
-canvas.addEventListener('keydown',e=>{let idx=focusIndex,used=true;if(e.key==='ArrowRight')idx=Math.min(targets.length-1,idx+1);else if(e.key==='ArrowLeft')idx=Math.max(0,idx-1);else if(e.key==='ArrowDown')idx=Math.min(targets.length-1,idx+cols);else if(e.key==='ArrowUp')idx=Math.max(0,idx-cols);else if(e.key===' '||e.key==='Enter'){lastIndex=-1;badCell=-1;applyAt(focusIndex)}else used=false;if(used){e.preventDefault();focusIndex=idx;render();const sz=+$('zoom').value;$('scroller').scrollTo({left:Math.max(0,(focusIndex%cols)*sz-$('scroller').clientWidth/2),top:Math.max(0,Math.floor(focusIndex/cols)*sz-$('scroller').clientHeight/2)})}});canvas.addEventListener('focus',render);canvas.addEventListener('blur',render);
-$('undo').addEventListener('click',()=>{const a=undoStack.pop();if(!a)return feedback('Nothing to undo yet.');colored[a.index]=a.old;updateAll();feedback('Last change undone.')});$('eraseToggle').addEventListener('click',()=>{eraser=!eraser;$('eraseToggle').classList.toggle('soft',eraser);$('eraseToggle').setAttribute('aria-pressed',String(eraser));paletteView();feedback(eraser?'Eraser active. Click any colored square to erase it.':`Color ${selected} selected.`)});
-$('hint').addEventListener('click',()=>{const idx=targets.findIndex((id,i)=>id===selected&&!colored[i]);if(idx<0)return feedback(`All number ${selected} squares are finished. Pick another color.`);const size=+$('zoom').value,view=$('scroller');view.scrollTo({left:Math.max(0,idx%cols*size-view.clientWidth/2),top:Math.max(0,Math.floor(idx/cols)*size-view.clientHeight/2),behavior:'smooth'});badCell=idx;render();feedback(`Hint: highlighted cell is a number ${selected}.`)});
-$('clear').addEventListener('click',()=>{if(colored.some(Boolean)&&!confirm('Start over? This clears your coloring progress.'))return;colored.fill(false);undoStack=[];updateAll();feedback('Activity restarted. Your numbered grid is unchanged.')});$('numbersToggle').addEventListener('click',()=>{showNumbers=!showNumbers;$('numbersToggle').textContent=showNumbers?'# Show numbers':'◌ Numbers hidden';$('numbersToggle').setAttribute('aria-pressed',String(showNumbers));render()});$('zoom').addEventListener('change',render);
-$('size').addEventListener('input',e=>$('sizeOut').value=e.target.value);$('colors').addEventListener('input',e=>$('colorsOut').value=e.target.value);
-$('create').addEventListener('click',()=>{if(colored.some(Boolean)&&!confirm('Make a new grid? Current coloring progress will be cleared.'))return;buildGrid()});
-function handleFile(file){if(!file)return;if(!file.type.startsWith('image/'))return feedback('Please upload a JPG, PNG or another image file.',true);const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=url;image=img;imageName=file.name;$('filename').textContent=file.name;updateOriginalPreview();buildGrid();feedback('Image loaded! Its actual colors were extracted for your palette.')};img.onerror=()=>{URL.revokeObjectURL(url);feedback('Could not read this image.',true)};img.src=url}
-$('upload').addEventListener('change',e=>{handleFile(e.target.files[0]);e.target.value=''});const dz=$('dropzone');dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')});dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');handleFile(e.dataTransfer.files[0])});$('useSample').addEventListener('click',()=>{if(colored.some(Boolean)&&!confirm('Load sample? Current coloring progress will be cleared.'))return;if(imageUrl){URL.revokeObjectURL(imageUrl);imageUrl=''}demo();buildGrid()});
-function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),8000)}
-$('png').addEventListener('click',()=>canvas.toBlob(blob=>blob&&download(blob,'my-pixel-coloring.png'),'image/png'));
-$('save').addEventListener('click',()=>{const data={app:'Pixel Color Studio',version:1,created:new Date().toISOString(),name:imageName,preview:$('originalPreview').src,cols,rows,palette:palette.map(p=>({rgb:p.rgb,hex:p.hex,name:p.name})),targets,colored};download(new Blob([JSON.stringify(data)],{type:'application/json'}),'pixel-coloring-progress.json');feedback('Progress saved. Use Load saved progress to continue later.')});
-$('load').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.app!=='Pixel Color Studio'||!Number.isInteger(data.cols)||!Number.isInteger(data.rows)||data.cols<1||data.rows<1||data.cols*data.rows>20000||!Array.isArray(data.palette)||!data.palette.length||data.palette.length>24||!Array.isArray(data.targets)||!Array.isArray(data.colored)||data.targets.length!==data.cols*data.rows||data.colored.length!==data.targets.length||!data.targets.every(x=>Number.isInteger(x)&&x>=1&&x<=data.palette.length)||!data.palette.every(p=>/^#[0-9a-fA-F]{6}$/.test(p.hex))||!data.colored.every(x=>typeof x==='boolean'))throw Error('This file is not valid Pixel Color Studio progress.');if(colored.some(Boolean)&&!confirm('Load saved activity and replace your current progress?'))return;cols=data.cols;rows=data.rows;targets=data.targets;colored=data.colored;palette=data.palette.map(p=>({rgb:[1,3,5].map(i=>parseInt(p.hex.slice(i,i+2),16)),hex:p.hex,name:String(p.name||'Color').slice(0,32)}));selected=1;eraser=false;undoStack=[];$('eraseToggle').classList.remove('soft');$('eraseToggle').setAttribute('aria-pressed','false');$('filename').textContent=`Restored: ${String(data.name||file.name).slice(0,100)}`;if(typeof data.preview==='string'&&data.preview.startsWith('data:image/png;base64,')){const im=new Image();im.onload=()=>{image=im;imageName=String(data.name||'Restored activity');$('originalPreview').src=data.preview};im.src=data.preview;}$('size').value=Math.max(12,Math.min(64,cols));$('sizeOut').textContent=cols;$('colors').value=Math.max(3,Math.min(24,palette.length));$('colorsOut').textContent=palette.length;updateAll();feedback('Saved progress loaded. Keep coloring!')}catch(err){feedback(err.message,true)}finally{e.target.value=''}});
-function printPage(){const p=$('printCanvas'),key=$('printKey');p.replaceChildren();key.replaceChildren();const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox',`0 0 ${cols} ${rows}`);svg.setAttribute('xmlns',ns);svg.setAttribute('role','img');svg.setAttribute('aria-label','Printable numbered grid');svg.style.width=`${Math.min(169,163*cols/rows)}mm`;svg.style.height='auto';const mode=$('printMode').value;for(let i=0;i<targets.length;i++){const x=i%cols,y=Math.floor(i/cols),id=targets[i],fill=mode==='solution'||mode==='progress'&&colored[i];const rect=document.createElementNS(ns,'rect');rect.setAttribute('x',x);rect.setAttribute('y',y);rect.setAttribute('width',1);rect.setAttribute('height',1);rect.setAttribute('fill',fill?palette[id-1].hex:'#fff');rect.setAttribute('stroke','#a9b2c1');rect.setAttribute('stroke-width','.025');svg.append(rect);if(!fill){const t=document.createElementNS(ns,'text');t.setAttribute('x',x+.5);t.setAttribute('y',y+.62);t.setAttribute('font-family','Arial,sans-serif');t.setAttribute('font-weight','bold');t.setAttribute('font-size',id>=10?'.44':'.50');t.setAttribute('text-anchor','middle');t.setAttribute('fill','#233048');t.textContent=id;svg.append(t)}}p.append(svg);palette.forEach((v,i)=>{const item=document.createElement('div');item.className='print-key-item';const sw=document.createElement('span');sw.className='pchip';sw.style.background=v.hex;const label=document.createElement('span');const n=document.createElement('b');n.textContent=`${i+1} `;label.append(n,document.createTextNode(v.name));item.append(sw,label);key.append(item)});$('printSubtitle').textContent=`${mode==='blank'?'Color by Number Worksheet':mode==='progress'?'Coloring Progress':'Completed Color Reference'}  ·  ${cols} × ${rows} cells  ·  ${palette.length} colors`}
-$('print').addEventListener('click',()=>{printPage();window.print();feedback('Print window opened. Select Save as PDF to save a one-page worksheet.')});
-setInteractionMode(interactionMode);demo();buildGrid();
+  const demo = document.createElement('canvas');
+  const dc = demo.getContext('2d');
+  const CELL = 28;
+
+  let source = demo;
+  let size = 40;
+  let palette = [];
+  let numbers = [];
+  let filled = [];
+  let selected = 1;
+  let erasing = false;
+  let history = [];
+
+  let mode = matchMedia('(pointer: coarse)').matches
+    ? 'move' : 'paint';
+
+  let tap = null;
+  let dragging = false;
+  let lastCell = -1;
+
+  let photoUrl = '';
+  let uploadedPhoto = null;
+  let teacherUrl = document.body.dataset.teacherForm || '';
+
+  // Create the example picture.
+  demo.width = demo.height = 400;
+  dc.fillStyle = '#8bbff4';
+  dc.fillRect(0, 0, 400, 400);
+
+  dc.fillStyle = '#f8ce56';
+  dc.fillRect(285, 40, 80, 80);
+
+  dc.fillStyle = '#50a66e';
+  dc.fillRect(0, 295, 400, 105);
+
+  dc.fillStyle = '#f3d5a5';
+  dc.fillRect(120, 185, 170, 155);
+
+  dc.fillStyle = '#b95863';
+  dc.beginPath();
+  dc.moveTo(98, 190);
+  dc.lineTo(205, 92);
+  dc.lineTo(310, 190);
+  dc.fill();
+
+  dc.fillStyle = '#734636';
+  dc.fillRect(185, 265, 45, 75);
+
+  dc.fillStyle = '#e6f9ff';
+  dc.fillRect(138, 218, 35, 36);
+
+  // Color conversion.
+  const hex = rgb =>
+    '#' + rgb.map(v =>
+      v.toString(16).padStart(2, '0')
+    ).join('').toUpperCase();
+
+  const rgb = hexColor =>
+    [1, 3, 5].map(i =>
+      parseInt(hexColor.slice(i, i + 2), 16)
+    );
+
+  // Convert RGB to perceptual Lab colors.
+  function lab(color) {
+    const linear = v => {
+      v /= 255;
+      return v <= .04045
+        ? v / 12.92
+        : ((v + .055) / 1.055) ** 2.4;
+    };
+
+    const [r, g, b] = color.map(linear);
+
+    const x = (
+      .4124564 * r + .3575761 * g + .1804375 * b
+    ) / .95047;
+
+    const y =
+      .2126729 * r + .7151522 * g + .072175 * b;
+
+    const z = (
+      .0193339 * r + .119192 * g + .9503041 * b
+    ) / 1.08883;
+
+    const f = t => t > .008856
+      ? Math.cbrt(t)
+      : 7.787037 * t + 16 / 116;
+
+    const [fx, fy, fz] = [f(x), f(y), f(z)];
+
+    return [
+      116 * fy - 16,
+      500 * (fx - fy),
+      200 * (fy - fz)
+    ];
+  }
+
+  const difference = (a, b) =>
+    a.reduce((sum, v, i) =>
+      sum + (v - b[i]) ** 2, 0
+    );
+
+  function nearest(point, candidates) {
+    let best = 0;
+    let bestDistance = Infinity;
+
+    for (let i = 0; i < candidates.length; i++) {
+      const d = difference(point, candidates[i]);
+
+      if (d < bestDistance) {
+        bestDistance = d;
+        best = i;
+      }
+    }
+
+    return best;
+  }
+
+  // Extract representative colors from source pixels.
+  function extractPalette(pixels, limit) {
+    const buckets = new Map();
+
+    for (const p of pixels) {
+      const key = p.map(v => v >> 4).join(',');
+
+      if (!buckets.has(key)) {
+        buckets.set(key, {
+          color: p,
+          weight: 0
+        });
+      }
+
+      buckets.get(key).weight++;
+    }
+
+    const choices = [...buckets.values()].map(p => ({
+      ...p,
+      point: lab(p.color)
+    }));
+
+    choices.sort((a, b) => b.weight - a.weight);
+
+    if (!choices.length) return [];
+
+    const selectedColors = [choices[0]];
+
+    const minimumDistances = choices.map(c =>
+      difference(c.point, choices[0].point)
+    );
+
+    while (
+      selectedColors.length <
+      Math.min(limit, choices.length)
+    ) {
+      let winner = -1;
+      let bestScore = 0;
+
+      for (let i = 0; i < choices.length; i++) {
+        const score =
+          minimumDistances[i] *
+          Math.sqrt(choices[i].weight);
+
+        if (score > bestScore) {
+          bestScore = score;
+          winner = i;
+        }
+      }
+
+      if (winner === -1) break;
+
+      const chosen = choices[winner];
+      selectedColors.push(chosen);
+
+      for (let i = 0; i < choices.length; i++) {
+        minimumDistances[i] = Math.min(
+          minimumDistances[i],
+          difference(choices[i].point, chosen.point)
+        );
+      }
+    }
+
+    return selectedColors.map(c => ({
+      hex: hex(c.color),
+      lab: c.point
+    }));
+  }
+
+  // Turn image into numbered grid.
+  function generate() {
+    size = Number($('resolution').value);
+
+    const samplesPerSide = 3;
+    const small = document.createElement('canvas');
+
+    small.width = small.height =
+      size * samplesPerSide;
+
+    const c = small.getContext('2d', {
+      willReadFrequently: true
+    });
+
+    // Nearest-neighbor sampling:
+    // do not interpolate new shades.
+    c.imageSmoothingEnabled = false;
+
+    const w = source.naturalWidth || source.width;
+    const h = source.naturalHeight || source.height;
+    const side = Math.min(w, h);
+
+    c.drawImage(
+      source,
+      (w - side) / 2,
+      (h - side) / 2,
+      side,
+      side,
+      0,
+      0,
+      small.width,
+      small.height
+    );
+
+    const data = c.getImageData(
+      0, 0, small.width, small.height
+    ).data;
+
+    const pixels = [];
+
+    for (let i = 0; i < data.length; i += 4) {
+      const alpha = data[i + 3] / 255;
+
+      pixels.push([
+        Math.round(
+          data[i] * alpha + 255 * (1 - alpha)
+        ),
+        Math.round(
+          data[i + 1] * alpha + 255 * (1 - alpha)
+        ),
+        Math.round(
+          data[i + 2] * alpha + 255 * (1 - alpha)
+        )
+      ]);
+    }
+
+    palette = extractPalette(
+      pixels,
+      Number($('colorCount').value)
+    );
+
+    const points = palette.map(c => c.lab);
+
+    const mapped = pixels.map(p =>
+      nearest(lab(p), points)
+    );
+
+    numbers = [];
+
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
+        const votes = Array(palette.length).fill(0);
+
+        for (let y = 0; y < samplesPerSide; y++) {
+          for (let x = 0; x < samplesPerSide; x++) {
+            const i =
+              (row * samplesPerSide + y) *
+              small.width +
+              col * samplesPerSide + x;
+
+            votes[mapped[i]]++;
+          }
+        }
+
+        numbers.push(
+          votes.indexOf(Math.max(...votes)) + 1
+        );
+      }
+    }
+
+    // Remove unused colors and renumber.
+    const used = [...new Set(numbers)]
+      .sort((a, b) => a - b);
+
+    palette = used.map(i => palette[i - 1]);
+
+    numbers = numbers.map(i =>
+      used.indexOf(i) + 1
+    );
+
+    filled = Array(numbers.length).fill(false);
+    history = [];
+    selected = 1;
+    erasing = false;
+
+    canvas.width = canvas.height = size * CELL;
+
+    render();
+
+    $('message').textContent =
+      'Choose a color, then tap the matching numbers.';
+  }
+
+  // Draw coloring board.
+  function render() {
+    ctx.clearRect(
+      0, 0, canvas.width, canvas.height
+    );
+
+    ctx.font = 'bold 14px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    for (let i = 0; i < numbers.length; i++) {
+      const x = (i % size) * CELL;
+      const y = Math.floor(i / size) * CELL;
+
+      ctx.fillStyle = filled[i]
+        ? palette[numbers[i] - 1].hex
+        : '#FFFFFF';
+
+      ctx.fillRect(x, y, CELL, CELL);
+
+      if (!filled[i]) {
+        ctx.fillStyle = '#243047';
+        ctx.fillText(
+          String(numbers[i]),
+          x + CELL / 2,
+          y + CELL / 2
+        );
+      }
+
+      ctx.strokeStyle = '#cbd2df';
+      ctx.strokeRect(
+        x + .5, y + .5, CELL, CELL
+      );
+    }
+
+    const done = filled.filter(Boolean).length;
+
+    const percentage =
+      Math.round(done / filled.length * 100) || 0;
+
+    $('progressText').textContent =
+      `${percentage}% complete ` +
+      `(${done}/${filled.length} squares)`;
+
+    $('progressFill').style.width =
+      percentage + '%';
+
+    drawPalette();
+
+    if (done === filled.length && done > 0) {
+      $('message').textContent =
+        'Great work! Your picture is complete.';
+    }
+  }
+
+  // Show numbered color choices.
+  function drawPalette() {
+    $('palette').replaceChildren();
+    $('quickColors').replaceChildren();
+
+    palette.forEach((color, index) => {
+      const number = index + 1;
+
+      for (const [container, quick] of [
+        [$('palette'), false],
+        [$('quickColors'), true]
+      ]) {
+        const button =
+          document.createElement('button');
+
+        button.type = 'button';
+
+        button.className =
+          (!erasing && selected === number)
+            ? 'active'
+            : '';
+
+        const chip =
+          document.createElement('span');
+
+        chip.className = 'chip';
+        chip.style.background = color.hex;
+
+        button.append(
+          chip,
+          document.createTextNode(
+            quick
+              ? `${number}`
+              : `${number} = ${color.hex}`
+          )
+        );
+
+        button.onclick = () => {
+          selected = number;
+          erasing = false;
+
+          drawPalette();
+
+          $('message').textContent =
+            `Color ${number} selected. ` +
+            `Paint squares numbered ${number}.`;
+        };
+
+        container.append(button);
+      }
+    });
+  }
+
+  // Mobile touch modes.
+  function setMode(next) {
+    mode = next;
+    tap = null;
+    dragging = false;
+
+    canvas.classList.toggle(
+      'drag-paint',
+      mode === 'paint'
+    );
+
+    $('moveMode').classList.toggle(
+      'active',
+      mode === 'move'
+    );
+
+    $('paintMode').classList.toggle(
+      'active',
+      mode === 'paint'
+    );
+
+    $('touchHint').textContent =
+      mode === 'move'
+        ? 'Swipe to scroll in any direction. Tap a square to color it.'
+        : 'Drag to color multiple matching squares. Choose Move / Tap to scroll.';
+  }
+
+  function paintAt(event) {
+    const bounds =
+      canvas.getBoundingClientRect();
+
+    const col = Math.floor(
+      (event.clientX - bounds.left) /
+      bounds.width * size
+    );
+
+    const row = Math.floor(
+      (event.clientY - bounds.top) /
+      bounds.height * size
+    );
+
+    if (
+      col < 0 || row < 0 ||
+      col >= size || row >= size
+    ) return;
+
+    const index = row * size + col;
+
+    if (dragging && index === lastCell) return;
+
+    lastCell = index;
+
+    if (erasing && filled[index]) {
+      history.push({
+        index,
+        old: filled[index]
+      });
+
+      filled[index] = false;
+      render();
+
+    } else if (
+      !erasing &&
+      !filled[index] &&
+      numbers[index] === selected
+    ) {
+      history.push({
+        index,
+        old: filled[index]
+      });
+
+      filled[index] = true;
+      render();
+
+    } else if (
+      !erasing &&
+      numbers[index] !== selected
+    ) {
+      $('message').textContent =
+        `That square is number ${numbers[index]}. ` +
+        `Select color ${numbers[index]}.`;
+    }
+  }
+
+  canvas.addEventListener('pointerdown', e => {
+    if (mode === 'move') {
+      tap = {
+        id: e.pointerId,
+        x: e.clientX,
+        y: e.clientY
+      };
+      return;
+    }
+
+    e.preventDefault();
+
+    dragging = true;
+    lastCell = -1;
+
+    canvas.setPointerCapture(e.pointerId);
+    paintAt(e);
+  });
+
+  canvas.addEventListener('pointermove', e => {
+    if (mode === 'paint' && dragging) {
+      paintAt(e);
+    }
+  });
+
+  canvas.addEventListener('pointerup', e => {
+    if (
+      mode === 'move' &&
+      tap?.id === e.pointerId &&
+      Math.hypot(
+        e.clientX - tap.x,
+        e.clientY - tap.y
+      ) < 10
+    ) {
+      lastCell = -1;
+      paintAt(e);
+    }
+
+    tap = null;
+    dragging = false;
+  });
+
+  canvas.addEventListener(
+    'pointercancel',
+    () => {
+      tap = null;
+      dragging = false;
+    }
+  );
+
+  $('moveMode').onclick = () => setMode('move');
+  $('paintMode').onclick = () => setMode('paint');
+
+  // File downloads.
+  function download(blob, name) {
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.click();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 5000);
+  }
+
+  function saveCanvas(canvasToSave, name) {
+    canvasToSave.toBlob(blob => {
+      if (blob) download(blob, name);
+    }, 'image/png');
+  }
+
+  const safeName = text =>
+    text.trim()
+      .replace(/[^a-zA-Z0-9_-]+/g, '_')
+      .slice(0, 45);
+
+  // Upload an image.
+  $('upload').onchange = e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      source = image;
+      $('originalPreview').src = url;
+      generate();
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      alert('Please choose a valid JPG or PNG image.');
+    };
+
+    image.src = url;
+  };
+
+  $('resolution').oninput = e => {
+    $('sizeValue').textContent =
+      $('sizeValue2').textContent =
+      e.target.value;
+  };
+
+  $('colorCount').oninput = e => {
+    $('countValue').textContent = e.target.value;
+  };
+
+  $('generate').onclick = generate;
+
+  // Undo, erase and reset.
+  $('undo').onclick = () => {
+    const action = history.pop();
+
+    if (action) {
+      filled[action.index] = action.old;
+      render();
+    }
+  };
+
+  $('erase').onclick = () => {
+    erasing = !erasing;
+    drawPalette();
+
+    $('message').textContent =
+      erasing ? 'Eraser selected.' : 'Eraser off.';
+  };
+
+  $('reset').onclick = () => {
+    if (confirm('Erase all coloring and start again?')) {
+      filled.fill(false);
+      history = [];
+      render();
+    }
+  };
+
+  $('savePNG').onclick = () => {
+    saveCanvas(
+      canvas,
+      'my-pixel-coloring.png'
+    );
+  };
+
+  // Save activity progress as JSON.
+  $('saveProject').onclick = () => {
+    const state = {
+      size,
+      colors: palette.map(c => c.hex),
+      numbers,
+      filled
+    };
+
+    download(
+      new Blob([JSON.stringify(state)], {
+        type: 'application/json'
+      }),
+      'pixel-coloring-progress.json'
+    );
+  };
+
+  $('openProject').onclick = () => {
+    $('projectFile').click();
+  };
+
+  $('projectFile').onchange = async e => {
+    try {
+      const data = JSON.parse(
+        await e.target.files[0].text()
+      );
+
+      if (
+        !Number.isInteger(data.size) ||
+        data.size < 12 ||
+        data.size > 64 ||
+        !Array.isArray(data.colors) ||
+        data.colors.length < 1 ||
+        data.colors.length > 24 ||
+        !data.colors.every(c =>
+          /^#[0-9a-fA-F]{6}$/.test(c)
+        ) ||
+        !Array.isArray(data.numbers) ||
+        !Array.isArray(data.filled) ||
+        data.numbers.length !== data.size ** 2 ||
+        data.filled.length !== data.size ** 2 ||
+        !data.numbers.every(n =>
+          Number.isInteger(n) &&
+          n >= 1 &&
+          n <= data.colors.length
+        )
+      ) {
+        throw new Error('Invalid project file');
+      }
+
+      size = data.size;
+
+      palette = data.colors.map(color => ({
+        hex: color,
+        lab: lab(rgb(color))
+      }));
+
+      numbers = data.numbers;
+      filled = data.filled.map(Boolean);
+
+      selected = 1;
+      erasing = false;
+      history = [];
+
+      $('resolution').value = size;
+
+      $('sizeValue').textContent =
+        $('sizeValue2').textContent = size;
+
+      canvas.width = canvas.height =
+        size * CELL;
+
+      render();
+
+      $('message').textContent =
+        'Saved coloring loaded!';
+
+    } catch (error) {
+      alert(
+        'Could not open progress: ' +
+        error.message
+      );
+    }
+
+    e.target.value = '';
+  };
+
+  // Print white numbered squares with colored key.
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  const makeSVG = (tag, attributes = {}) => {
+    const element =
+      document.createElementNS(svgNS, tag);
+
+    Object.entries(attributes).forEach(
+      ([key, value]) =>
+        element.setAttribute(key, value)
+    );
+
+    return element;
+  };
+
+  $('print').onclick = () => {
+    const side = 14;
+
+    const sheet = makeSVG('svg', {
+      xmlns: svgNS,
+      viewBox:
+        `0 0 ${size * side} ${size * side}`,
+      width: size * side,
+      height: size * side
+    });
+
+    // Print uncolored numbered grid.
+    for (let i = 0; i < numbers.length; i++) {
+      const x = (i % size) * side;
+      const y = Math.floor(i / size) * side;
+
+      sheet.append(makeSVG('rect', {
+        x,
+        y,
+        width: side,
+        height: side,
+        fill: '#FFFFFF',
+        stroke: '#8792a7',
+        'stroke-width': .45
+      }));
+
+      const text = makeSVG('text', {
+        x: x + side / 2,
+        y: y + side / 2 + 3.1,
+        'text-anchor': 'middle',
+        'font-size': 8.8,
+        'font-family': 'Arial',
+        'font-weight': 'bold',
+        fill: '#26364c'
+      });
+
+      text.textContent = String(numbers[i]);
+      sheet.append(text);
+    }
+
+    $('printGrid').replaceChildren(sheet);
+    $('printKey').replaceChildren();
+
+    // Real colored SVG swatches for each number.
+    palette.forEach((color, i) => {
+      const entry =
+        document.createElement('div');
+
+      entry.className = 'keyItem';
+
+      const icon = makeSVG('svg', {
+        viewBox: '0 0 24 24'
+      });
+
+      icon.append(makeSVG('rect', {
+        x: 1,
+        y: 1,
+        width: 22,
+        height: 22,
+        fill: color.hex,
+        stroke: '#526077',
+        'stroke-width': 1
+      }));
+
+      const description =
+        document.createElement('span');
+
+      description.textContent =
+        `${i + 1} = ${color.hex}`;
+
+      entry.append(icon, description);
+      $('printKey').append(entry);
+    });
+
+    window.print();
+  };
+
+  // Create an image with student name and class.
+  function labeledImage(image) {
+    const width = 960;
+    const margin = 45;
+    const top = 145;
+
+    const result =
+      document.createElement('canvas');
+
+    const factor = Math.min(
+      (width - margin * 2) / image.width,
+      900 / image.height
+    );
+
+    result.width = width;
+
+    result.height = Math.round(
+      top + image.height * factor + margin
+    );
+
+    const c = result.getContext('2d');
+
+    c.fillStyle = '#FFFFFF';
+    c.fillRect(
+      0, 0, result.width, result.height
+    );
+
+    c.fillStyle = '#243047';
+    c.font = 'bold 29px Arial';
+
+    c.fillText(
+      'Pixel Coloring Assignment',
+      margin,
+      50
+    );
+
+    c.font = '21px Arial';
+
+    c.fillText(
+      'Name: ' +
+        ($('studentName').value.trim() ||
+        'Not specified').slice(0, 50),
+      margin,
+      89
+    );
+
+    c.fillText(
+      'Class: ' +
+        ($('studentClass').value.trim() ||
+        'Not specified').slice(0, 35),
+      margin,
+      119
+    );
+
+    c.drawImage(
+      image,
+      (width - image.width * factor) / 2,
+      top,
+      image.width * factor,
+      image.height * factor
+    );
+
+    return result;
+  }
+
+  function submissionName() {
+    const name =
+      safeName($('studentName').value) ||
+      'student';
+
+    const group =
+      safeName($('studentClass').value) ||
+      'class';
+
+    return `${name}_${group}_pixel_color.png`;
+  }
+
+  // Save completed digital work.
+  $('downloadDigital').onclick = () => {
+    saveCanvas(
+      labeledImage(canvas),
+      submissionName()
+    );
+
+    $('submissionMessage').textContent =
+      'Digital picture saved. Attach it to the teacher upload form.';
+  };
+
+  // Upload photograph of a colored worksheet.
+  $('finishedPhoto').onchange = e => {
+    uploadedPhoto = null;
+
+    if (photoUrl) {
+      URL.revokeObjectURL(photoUrl);
+    }
+
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    photoUrl = URL.createObjectURL(file);
+
+    const image = new Image();
+
+    image.onload = () => {
+      uploadedPhoto = image;
+
+      $('photoPreview').src = photoUrl;
+      $('photoPreview').style.display =
+        'block';
+
+      $('submissionMessage').textContent =
+        'Colored photo loaded. You can save the labeled photo.';
+    };
+
+    image.onerror = () => {
+      alert('Please choose a valid image file.');
+    };
+
+    image.src = photoUrl;
+  };
+
+  $('downloadPhoto').onclick = () => {
+    if (!uploadedPhoto) {
+      alert(
+        'Upload a photo of your colored worksheet first.'
+      );
+      return;
+    }
+
+    saveCanvas(
+      labeledImage(uploadedPhoto),
+      submissionName()
+    );
+
+    $('submissionMessage').textContent =
+      'Labeled worksheet photo saved. Attach it to the teacher upload form.';
+  };
+
+  // Teacher submission form.
+  function getFormLink(value) {
+    try {
+      const parsed = new URL(value.trim());
+
+      return parsed.protocol === 'https:'
+        ? parsed.href
+        : '';
+    } catch {
+      return '';
+    }
+  }
+
+  $('teacherForm').value = teacherUrl;
+
+  $('setForm').onclick = () => {
+    const link = getFormLink(
+      $('teacherForm').value
+    );
+
+    if (!link) {
+      alert(
+        'Enter a valid HTTPS form link.'
+      );
+      return;
+    }
+
+    teacherUrl = link;
+    document.body.dataset.teacherForm = link;
+
+    $('submissionMessage').textContent =
+      'Teacher form link set in this browser.';
+  };
+
+  $('submitLink').onclick = () => {
+    if (!teacherUrl) {
+      $('submissionMessage').textContent =
+        'No teacher form link yet. Ask your teacher for one.';
+      return;
+    }
+
+    window.open(
+      teacherUrl,
+      '_blank',
+      'noopener,noreferrer'
+    );
+
+    $('submissionMessage').textContent =
+      'Upload your saved PNG to the form. Opening a link does not submit it automatically.';
+  };
+
+  // Generate classroom HTML with teacher's link.
+  $('teacherHTML').onclick = () => {
+    const link = getFormLink(
+      $('teacherForm').value || teacherUrl
+    );
+
+    if (!link) {
+      alert(
+        'Enter a valid HTTPS teacher form link first.'
+      );
+      return;
+    }
+
+    const copy =
+      document.documentElement.cloneNode(true);
+
+    copy.querySelector('body')
+      .dataset.teacherForm = link;
+
+    download(
+      new Blob(
+        ['<!DOCTYPE html>\n' + copy.outerHTML],
+        { type: 'text/html;charset=utf-8' }
+      ),
+      'pixel-color-studio-classroom.html'
+    );
+
+    $('submissionMessage').textContent =
+      'Classroom HTML downloaded with your form link embedded.';
+  };
+
+  // Start application.
+  setMode(mode);
+
+  $('originalPreview').src =
+    demo.toDataURL('image/png');
+
+  generate();
+
 })();
 </script>
 </body>
